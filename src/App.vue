@@ -1,26 +1,6 @@
-
 <template>
   <v-app class="app">
-    <v-toolbar
-      app
-      class="header content"
-    >
-      <img src="@/assets/llama.png" alt="Vuetify.js" class="icon">
-      <v-toolbar-title class="header-title" v-text="title"></v-toolbar-title>
-      <router-link to="/">
-        <v-btn class="header-button"> Početna </v-btn>
-      </router-link>
-      <router-link to="/korisnici/pregled">
-        <v-btn class="header-button"> Korisnici </v-btn>
-      </router-link>
-      <v-spacer></v-spacer>
-      <router-link to="/prijava">
-        <v-btn class="header-button" right> Prijava </v-btn>
-      </router-link>
-      <router-link to="/registracija">
-        <v-btn class="header-button" right> Registracija </v-btn>
-      </router-link>
-    </v-toolbar>
+    <app-header />
     <v-content class="content">
       <router-view/>
     </v-content>
@@ -31,6 +11,9 @@
 </template>
 
 <style scoped>
+  .app * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  }
   .icon {
     width: 40px;
     height: 40px;
@@ -46,15 +29,15 @@
     background-color: #FF7F50 !important;
     color: white;
   }
+  .link {
+    text-decoration: none !important;
+  }
   .footer {
     padding-left: 20px;
   }
 </style>
 
 <style>
-  .app * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-  }
   .content {
     width: 70%;
     margin-left: 15%;
@@ -85,7 +68,12 @@
 </style>
 
 <script>
+import Header from './views/layout/Header';
+
 export default {
+  components: {
+    'app-header': Header
+  },
   data () {
     return {
       title: 'Škollama'
