@@ -68,6 +68,11 @@ export default {
             this.year = parseInt(this.year,10) - 1
             if(this.year < 1) this.year = 1;
         }
+    },
+    beforeMount() {
+        if(!this.$skollama.role.headmaster) {
+            this.$router.push({ path: '/' });
+        }
     }
 }
 </script>

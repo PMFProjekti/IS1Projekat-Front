@@ -4,8 +4,16 @@
             <div class='name'>{{subject.name}}</div>
             <div class='year'>Godina: {{subject.year}}</div>
             <v-spacer />
-            <v-btn class='button'>Izmeni</v-btn>
-            <v-btn class='button'>Obriši</v-btn>
+            <v-btn v-if='!lecture' class='button'>Izmeni</v-btn>
+            <v-btn v-if='!lecture' class='button'>Obriši</v-btn>
+            <user-selector
+                class='professor-select'
+                v-if='lecture'
+                displaySelection
+                :users='professors'
+                :value='subject.professor'
+                @select='connect'
+                placeholder='Izaberi profesora' />
         </v-layout>
     </v-card>
 </template>
@@ -32,17 +40,44 @@
         margin-top: 18px;
         margin-right: 20px;
     }
+    .professor-select {
+        margin-top: 10px;
+        max-width: 300px;
+    }
 </style>
 
 <script>
+import UserSelector from '../../account/components/UserSelector';
 
 export default {
-    props: ['subject'],
+    components: {
+        'user-selector': UserSelector
+    },
+    props: {
+        subject: {
+            type: Object,
+            required: true
+        },
+        lecture: {
+            type: Boolean,
+            default: false
+        },
+        professors: {
+            required: false
+        }
+    },
     data() {
         return {
         }
     },
     methods: {
+        connect(professor) {
+            let connection = {
+                professorId: professor.id,
+                subjectId: this.subject.id
+            }
+            this.$emit('connect', connection);
+        }
     }
 }
 </script>

@@ -1,3 +1,5 @@
+import { throws } from "assert";
+
 export default {
     data () {
         return {
@@ -71,10 +73,18 @@ export default {
         },
         update(user) {
             this.$skollama.user = { email: this.email, ...user };
+            this.$skollama.role = {
+                student: user.role === 'student',
+                professor: user.role === 'professor',
+                headmaster: user.role === 'headmaster'
+            };
             localStorage.setItem('user', JSON.stringify(this.$skollama.user));
         },
         loggedIn() {
             return this.$skollama.user != null;
+        },
+        role(role) {
+            return this.$skollama.role[role];
         }
     }
 }

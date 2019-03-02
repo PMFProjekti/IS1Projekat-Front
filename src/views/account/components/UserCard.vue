@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if='!inline' class="card" :class="{ 'small': small }">
+    <v-card @click='$emit("click", user)' v-if='!inline' class="card" :class="{ 'small': small }">
         <v-layout row>
             <v-img
                 contain
@@ -21,7 +21,7 @@
                 </v-layout>
             </v-layout>
         </v-layout>
-        <v-icon @click='$emit("remove")' v-if='removeButton' class='remove'>close_circle</v-icon>
+        <v-icon @click.stop='$emit("remove")' v-if='removeButton' class='remove'>close_circle</v-icon>
     </v-card>
     
     <v-layout class='inline-card' v-else row>

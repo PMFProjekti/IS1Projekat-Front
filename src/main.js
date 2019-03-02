@@ -14,6 +14,8 @@ Vue.config.productionTip = false
 
 let user = JSON.parse(localStorage.getItem('user'));
 
+console.log(user);
+
 Vue.prototype.$skollama = {
     user: user,
     token: null,
@@ -22,8 +24,15 @@ Vue.prototype.$skollama = {
         routes: {
             account:'account',
             group:'group',
-            subject: 'subject'
+            subject: 'subject',
+            lecture: 'lecture',
+            grades: 'grades'
         }
+    },
+    role: {
+        student: user.role === 'student',
+        professor: user.role === 'professor',
+        headmaster: user.role === 'headmaster'
     },
     formPath(route, additionalRoute, body) {
         let path = this.api.path;

@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="slim-content">
         <v-layout column>
-            <h1>Kreiranje odelenja</h1>
+            <h1>Kreiranje odeljenja</h1>
             <hr class="divider" />
             <label class="label">Naziv</label>
             <v-text-field
@@ -80,6 +80,9 @@ export default {
         }
     },
     beforeMount() {
+        if(!this.$skollama.role.headmaster) {
+            this.$router.push({ path: '/' });
+        }
         let path = this.$skollama.formPath('account', 'all', { role: 'professor' } );
         this.$http.get(path).then(data => { this.professors = data.body; }, error => console.error(error));
     },

@@ -5,13 +5,13 @@
         <router-link class='link' to='/'>
             <v-btn class='header-button'> Početna </v-btn>
         </router-link>
-        <router-link v-if='loggedIn()' class='link' to='/korisnici/pregled'>
+        <router-link v-if='loggedIn() && role("headmaster")' class='link' to='/korisnici/pregled'>
             <v-btn class="header-button"> Korisnici </v-btn>
         </router-link>
-        <router-link v-if='loggedIn()' class='link' to='/odelenja/pregled'>
+        <router-link v-if='loggedIn() && (role("headmaster") || role("professor"))' class='link' to='/odeljenja/pregled'>
             <v-btn class="header-button"> Odeljenja </v-btn>
         </router-link>
-        <router-link v-if='loggedIn()' class='link' to='/predmeti/pregled'>
+        <router-link v-if='loggedIn() && role("headmaster")' class='link' to='/predmeti/pregled'>
             <v-btn class="header-button"> Predmeti </v-btn>
         </router-link>
         <v-spacer></v-spacer>

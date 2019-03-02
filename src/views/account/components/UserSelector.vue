@@ -27,6 +27,10 @@ export default {
         'user-card': UserCard
     },
     props: {
+        value: {
+            type: Object,
+            default: null
+        },
         users: {
             type: Array,
             required: true
@@ -49,9 +53,13 @@ export default {
             selected: null
         }
     },
+    mounted() {
+        this.selected = this.value;
+    },
     methods: {
         onSelect(value) {
             this.$emit('select', value)
+            if(!this.displaySelection) this.selected = null;
         }
     }
 }

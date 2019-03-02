@@ -1,15 +1,16 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/views/Home'
-import Login from '@/views/account/Login'
-import Register from '@/views/account/Register'
-import Profile from '@/views/account/Profile'
-import Overview from '@/views/account/Overview'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@/views/Home';
+import Login from '@/views/account/Login';
+import Register from '@/views/account/Register';
+import Profile from '@/views/account/Profile';
+import Overview from '@/views/account/Overview';
 import GroupCreate from '@/views/group/Create';
-import GroupOverview from '@/views/group/Overview'
-import SubjectCreate from '@/views/subject/Create'
-import SubjectOverview from '@/views/subject/Overview'
-import SubjectLecture from '@/views/subject/Lecture'
+import GroupOverview from '@/views/group/Overview';
+import SubjectCreate from '@/views/subject/Create';
+import SubjectOverview from '@/views/subject/Overview';
+import SubjectLecture from '@/views/subject/Lecture';
+import GradesView from '@/views/grades/Grades';
 
 Vue.use(Router);
 
@@ -41,12 +42,12 @@ export default new Router({
             component: Overview
         },
         {
-            path: '/odelenja/kreiraj/',
+            path: '/odeljenja/kreiraj/',
             name: 'GroupCreate',
             component: GroupCreate
         },
         {
-            path: '/odelenja/pregled/',
+            path: '/odeljenja/pregled/',
             name: 'GroupOverview',
             component: GroupOverview
         },
@@ -64,6 +65,11 @@ export default new Router({
             path: '/predmeti/predavanja/:groupId',
             name: 'SubjectLecture',
             component: SubjectLecture
+        },
+        {
+            path: '/ocene/:studentId',
+            name: 'GradesView',
+            component: GradesView
         }
     ]
 })

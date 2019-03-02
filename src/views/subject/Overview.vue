@@ -56,6 +56,9 @@ export default {
         }
     },
     beforeMount() {
+        if(!this.$skollama.role.headmaster) {
+            this.$router.push({ path: '/' });
+        }
         let path = this.$skollama.formPath(this.domain, 'all');
         this.$http.get(path).then(data => { this.subjects = data.body }, error => console.error(error));
     }

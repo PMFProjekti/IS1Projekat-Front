@@ -10,9 +10,9 @@
             <hr />
             <div class="students">
                 <v-container class="list">
-                    <user-card removeButton @remove='remove(student)' small v-for='student in group.students' :key='student.email' :user='student' />
+                    <user-card @click='selectStudent' :removeButton='$skollama.role.headmaster' @remove='remove(student)' small v-for='student in group.students' :key='student.email' :user='student' />
                 </v-container>
-                <v-layout style="padding-top: 10px" row>
+                <v-layout v-if='$skollama.role.headmaster' style="padding-top: 10px" row>
                     <v-btn>Obriši</v-btn>
                     <router-link class='link' :to='"/predmeti/predavanja/" + this.group.id'>
                         <v-btn>Dodeli profesore</v-btn>
@@ -20,7 +20,7 @@
                     <v-spacer />
                     <v-layout class='new-student-select' row>
                         <v-icon class='add-student-icon'>add_circle</v-icon>
-                        <user-selector :users='students' @select='add' />
+                        <user-selector :users='filteredStudents' @select='add' />
                     </v-layout>
                 </v-layout>
             </div>
@@ -96,6 +96,16 @@ export default {
         'user-card': UserCard,
         'user-selector': UserSelector
     },
+    computed: {
+        filteredStudents() {
+            return this.students.filter(student => {
+                for(let i in this.group.students) {
+                    if(this.group.students[i].id == student.id) return false;
+                }
+                return true;
+            });
+        }
+    },
     data() {
         return {
             mentor: null,
@@ -115,6 +125,9 @@ export default {
         remove(student) {
             this.group.students.splice(this.group.students.indexOf(student), 1);
             this.$emit('remove', { studentId: student.id, groupId: this.group.id } );
+        },
+        selectStudent(student) {
+            this.$router.push({ path:'/ocene/'+student.id });
         }
     }
 }
