@@ -3,7 +3,7 @@
     <h1>Škollama</h1>
     <h2>Elektronski Dnevnik</h2>
     <hr class="divider" />
-    Wellcome
+    Dobrodošli
   </v-container>
 </template>
 

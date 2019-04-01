@@ -2,7 +2,7 @@
     <v-container fluid>
         <h1>Svi predmeti</h1>
         <hr class="divider" />
-        <subject-card v-for='subject of subjects' :key='subject.id' :subject='subject' />
+        <subject-card v-for='subject of subjects' :key='subject.id' @delete='deleteSubject' :subject='subject' />
         <v-layout row>
             <v-spacer />
             <router-link class='link' to='/predmeti/kreiraj'>
@@ -61,6 +61,11 @@ export default {
         }
         let path = this.$skollama.formPath(this.domain, 'all');
         this.$http.get(path).then(data => { this.subjects = data.body }, error => console.error(error));
+    },
+    methods: {
+        deleteSubject(subject) {
+            this.subjects.splice(this.subjects.indexOf(subject), 1);
+        }
     }
 }
 </script>

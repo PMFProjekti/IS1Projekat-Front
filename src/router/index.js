@@ -8,6 +8,7 @@ import Overview from '@/views/account/Overview';
 import GroupCreate from '@/views/group/Create';
 import GroupOverview from '@/views/group/Overview';
 import SubjectCreate from '@/views/subject/Create';
+import SubjectEdit from '@/views/subject/Edit';
 import SubjectOverview from '@/views/subject/Overview';
 import SubjectLecture from '@/views/subject/Lecture';
 import GradesView from '@/views/grades/Grades';
@@ -55,6 +56,11 @@ export default new Router({
             path: '/predmeti/kreiraj/',
             name: 'SubjectCreate',
             component: SubjectCreate
+        },
+        {
+            path: '/predmeti/izmeni/:subjectId',
+            name: 'SubjectEdit',
+            component: SubjectEdit
         },
         {
             path: '/predmeti/pregled/',

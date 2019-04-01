@@ -13,7 +13,7 @@
                     <user-card @click='selectStudent' :removeButton='$skollama.role.headmaster' @remove='remove(student)' small v-for='student in group.students' :key='student.email' :user='student' />
                 </v-container>
                 <v-layout v-if='$skollama.role.headmaster' style="padding-top: 10px" row>
-                    <v-btn>Obriši</v-btn>
+                    <v-btn @click='deleteGroup'>Obriši</v-btn>
                     <router-link class='link' :to='"/predmeti/predavanja/" + this.group.id'>
                         <v-btn>Dodeli profesore</v-btn>
                     </router-link>
@@ -128,6 +128,11 @@ export default {
         },
         selectStudent(student) {
             this.$router.push({ path:'/ocene/'+student.id });
+        },
+        deleteGroup() {
+            this.$emit('delete', { group: this.group } );
+            let path = this.$skollama.formPath('group', 'delete', { id: this.group.id } );
+            this.$http.get(path).then(() => { }, error => console.error(error));
         }
     }
 }

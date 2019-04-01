@@ -6,32 +6,41 @@
             <h2 class='student-label'>Učenik: </h2>
             <user-card v-if='student' small :user='student' />
         </v-layout>
-        <v-card class="offset">
+        <v-card v-if='grades && subjects' class="offset">
             <h2 class='title'>Ocene</h2>
             <hr class="divider small" />
             <v-layout class='grades' column>
-                <grade-card v-for='grade in grades.grades' :key='grade.id' :subjectGrades='grade' :subject='grade.subject' />
+                <grade-card @change='gradesChanged' v-for='grade in grades.grades' :key='grade.subjectId' :studentId='studentId' :subjectGrades='grade' :subjects='subjects' />
             </v-layout>
         </v-card>
-        <v-card class="offset">
+        <v-card v-if='grades' class="offset">
             <h2 class='title'>Izostanci</h2>
             <hr class="divider small" />
             <v-layout class='grades' column>
-                <div class='absence'><span>27. Februar 2019. - 4. čas </span>
+                <div v-for='absence in grades.absences' class='absence'><span>{{absence.date.toDateString()}} - {{absence.class}}. čas </span>
                     <v-checkbox
-                        readonly
-                        :value='true'
-                        :label="`Opravdan`"
-                    ></v-checkbox>
-                </div>
-                <div class='absence'><span>27. Februar 2019. - 5. čas </span>
-                    <v-checkbox
-                        readonly
-                        :value='false'
+                        :readonly='!mentor'
+                        v-model='absence.pardoned'
+                        @change='gradesChanged'
                         :label="`Opravdan`"
                     ></v-checkbox>
                 </div>
             </v-layout>
+            <v-layout v-if='newAbsence' row class='new-absence-input'>
+                <span style='font-size: 20px; padding-top: 8px; margin-right: 8px; margin-left:10px'>Čas:</span>
+                <v-select
+                    class='class-picker'
+                    v-model='newAbsence.class'
+                    :items="[1,2,3,4,5,6,7,8]"
+                    label="Čas"
+                    solo
+                ></v-select>
+            </v-layout>
+            <div @click='addNewAbsence' class='new-absence'>
+                <v-icon class='add-icon'>add_circle</v-icon>
+                <span style='padding-left:10px'>Dodaj izostanak</span>
+            </div>
+            
         </v-card>
     </v-container>
 </template>
@@ -59,6 +68,21 @@
     .offset {
         margin-top: 30px;
     }
+    .new-absence {
+        padding: 10px;
+        display: flex;
+        cursor: pointer;
+    }
+    .add-icon {
+        cursor: pointer;
+    }
+    .new-absence-input {
+        padding: 10px;
+    }
+    .class-picker {
+        max-width: 60px !important;
+        margin-right: 10px;
+    }
 </style>
 
 <script>
@@ -76,37 +100,49 @@ export default {
         return {
             studentId: null,
             student: null,
-            grades: {
-                grades: [
-                    {
-                        id: 0,
-                        subject: {
-                            name: 'Matematika 3'
-                        },
-                        values: [5, 4, 5, 5],
-                        locked: 5
-                    },
-                    {
-                        id: 1,
-                        subject: {
-                            name: 'Digitalna Elektronika'
-                        },
-                        values: [3, 5, 5],
-                        locked: 0,
-                        allowed: true
-                    }
-                ]
-            }
+            subjects: null,
+            grades: null,
+            mentor: false,
+            newAbsence: null
         }
     },
     beforeMount() {
         this.studentId = this.$route.params.studentId;
         let path = this.$skollama.formPath('account', 'find', { id: this.studentId });
         this.$http.get(path).then(data => this.student = data.body, error => console.error(error));
-        //path = this.$skollama.formPath('grades', 'all', { studentId: this.studentId });
-        //this.$http.get(path).then(data => this.grades = data.body, error => console.error(error));
+        path = this.$skollama.formPath('grades', 'all', { studentId: this.studentId });
+        this.$http.get(path).then(data => {
+            this.grades = data.body;
+            for(let i in this.grades.absences) {
+                this.grades.absences[i].date = new Date(this.grades.absences[i].date);
+            }
+        }, error => console.error(error));
+        path = this.$skollama.formPath('subject', 'all', { studentId: this.studentId });
+        this.$http.get(path).then(data => this.subjects = data.body, error => console.error(error));
+        path = this.$skollama.formPath('group', 'mentor', { studentId: this.studentId });
+        this.$http.get(path).then(data => {
+            this.mentor = this.$skollama.user.id == data.body.mentor;
+        }, error => console.error(error));
     },
     methods: {
+        addNewAbsence() {
+            if(!this.newAbsence) {
+                this.newAbsence = {
+                    class: 1,
+                    date: new Date(),
+                    pardoned: false
+                }
+            }
+            else {
+                this.grades.absences.push(this.newAbsence);
+                this.gradesChanged();
+                this.newAbsence = null;
+            }
+        },
+        gradesChanged() {
+            let path = this.$skollama.formPath('grades', 'update');
+            this.$http.post(path, this.grades).then(() => {}, error => console.error(error));
+        }
     }
 }
 </script>

@@ -4,7 +4,7 @@
         <h1 v-else>Moja odeljenja</h1>
         <hr class="divider" />
         <v-container class="list">
-            <group-card :key="group.name" v-for="group in shownGroups" :group="group" @add='tryAddStudent' @remove='tryRemoveStudent' />
+            <group-card :key="group.name" v-for="group in shownGroups" :group="group" @add='tryAddStudent' @remove='tryRemoveStudent' @delete='deleteGroup' />
         </v-container>
         <v-layout v-if='$skollama.role.headmaster' row>
             <v-spacer />
@@ -84,6 +84,11 @@ export default {
         this.$http.get(path).then(data => { this.groups = data.body; }, error => console.error(error));
         path = this.$skollama.formPath('lecture', 'all', { professorId: this.$skollama.user.id } );
         this.$http.get(path).then(data => { this.connections = data.body; }, error => console.error(error));
+    },
+    methods: {
+        deleteGroup(group) {
+            this.groups.splice(this.groups.indexOf(group), 1);
+        }
     }
 }
 </script>

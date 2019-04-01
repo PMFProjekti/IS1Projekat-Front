@@ -4,8 +4,10 @@
             <div class='name'>{{subject.name}}</div>
             <div class='year'>Godina: {{subject.year}}</div>
             <v-spacer />
-            <v-btn v-if='!lecture' class='button'>Izmeni</v-btn>
-            <v-btn v-if='!lecture' class='button'>Obriši</v-btn>
+            <router-link class='link' :to='"/predmeti/izmeni/"+subject.id'>
+                <v-btn v-if='!lecture' class='button'>Izmeni</v-btn>
+            </router-link>
+            <v-btn @click='deleteSubject' v-if='!lecture' class='button'>Obriši</v-btn>
             <user-selector
                 class='professor-select'
                 v-if='lecture'
@@ -44,6 +46,9 @@
         margin-top: 10px;
         max-width: 300px;
     }
+    .link {
+        text-decoration: none !important;
+    }
 </style>
 
 <script>
@@ -77,6 +82,11 @@ export default {
                 subjectId: this.subject.id
             }
             this.$emit('connect', connection);
+        },
+        deleteSubject() {
+            this.$emit('delete', this.subject);
+            let path = this.$skollama.formPath('subject', 'delete', { id: this.subject.id});
+            this.$http.get(path).then(() => {}, error => console.error(error));
         }
     }
 }

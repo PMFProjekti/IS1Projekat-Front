@@ -32,6 +32,32 @@
             </v-radio-group>
         </div>
         <v-btn @click='tryUpdate' class="prijava">Ažuriraj Profil</v-btn>
+        <div style='margin-top: 80px; margin-bottom: 30px;'>
+            <label  class="label">Nova šifra</label>
+            <v-text-field
+                solo
+                v-model="pass"
+                :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                :rules="[rules.required, rules.min]"
+                :type="showPassword ? 'text' : 'password'"
+                label="Šifra"
+                hint="Šifra mora biti dugačka makar 8 karaktera"
+                counter
+                @click:append="showPassword = !showPassword" />
+            <label class="label">Ponovi novu šifru</label>
+            <v-text-field
+                solo
+                v-model="passRepeat"
+                :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                :rules="[rules.required, rules.min]"
+                :type="showPassword ? 'text' : 'password'"
+                label="Šifra"
+                hint="Šifra mora biti dugačka makar 8 karaktera"
+                counter
+                @click:append="showPassword = !showPassword" />
+            <v-btn @click='changePassword' class="prijava">Izmeni Šifru</v-btn>
+        </div>
+        
     </v-container>
 </template>
 
@@ -71,6 +97,8 @@ export default {
     mixins: [Account],
     data () {
         return {
+            pass: "",
+            passRepeat: ""
         }
     },
     mounted() {
@@ -78,6 +106,18 @@ export default {
         this.email = this.user.email;
         this.picture = this.user.avatar;
         this.gender = this.user.gender;
+    },
+    methods: {
+        changePassword() {
+            console.log(this.$skollama.user);
+            let body = {
+                userId: this.$skollama.user.id,
+                password: this.pass,
+                confirmPassword: this.passRepeat
+            }
+            let path = this.$skollama.formPath('account', 'password');
+            this.$http.post(path, body).then(() => { this.$router.push({ path: '/' }); }, error => console.error(error));
+        }
     }
 }
 </script>
