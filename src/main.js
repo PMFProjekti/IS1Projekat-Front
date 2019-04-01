@@ -18,7 +18,7 @@ Vue.prototype.$skollama = {
     user: user,
     token: null,
     api: {
-        path:'https://projekat-is.herokuapp.com/',
+        path:'http://localhost:3000/',
         routes: {
             account:'account',
             group:'group',
